@@ -1,70 +1,117 @@
-#include  <stdio.h>
-#include  <stdlib.h>
-typedef struct LNode{
-	int num;
-	int data;
-	struct LNode  *next;
-}LNode,*LinkList;
-
-int delateQ_data = 0;
-
-LinkList iniList(){
-	LinkList head;
-	if(head = (LinkList) malloc (sizeof(LNode)))  head->next = NULL;
-	return head;
+#include<stdio.h>
+#include<stdlib.h>
+#define STACK_INI_SIZE 1000
+#define STACKINEMENT 10
+#define NULL 0
+typedef struct
+{
+	int *base;
+	int *top;
+	int stacksize;
+	int length;
+}stack;
+main()
+{
+	void initlist(stack *s);
+	void operation(stack *s);
+	stack s;
+	initlist(&s);
+	operation(&s);
 }
-
-LinkList creatListR(int a[],int n){
-	LinkList head = iniList();
-	LinkList r = head;
-	for(int i=0;i<n;i++){
-		LinkList q = (LinkList) malloc (sizeof(LNode));
-		q->num = i+1;
-		q->data = a[i];
-		r->next = q;
-		r = q;
-		printf("num:%d,p:%d\n",q->num,q->data);
+void initlist(stack *s)
+{
+	s->base=s->top=(int *)malloc(STACK_INI_SIZE*sizeof(int));
+	if(!s->base)
+	{
+		printf("开辟失败");
+		exit(1);
 	}
-	r->next = head->next;
-	return head;
+	s->length=0;
+	s->stacksize=STACK_INI_SIZE;
 }
-
-LinkList LinkDelete_L(LinkList *m,int i){
-	LinkList p,q;
-	p = m;
-	int j;
-	for(j=0;j<i-1;j++)	p = p->next;
-	q = p->next;
-	p->next = q->next;
-	printf("num:%d出局\n",q->num);
-	delateQ_data = q->data;
-	free(q);
-	return p;
+void push(stack *s,int i)
+{
+	if(s->length==s->stacksize)
+	{
+		s->base=(int *)realloc(s->base,(STACK_INI_SIZE+STACKINEMENT)*sizeof(int));
+		s->length=STACK_INI_SIZE;
+		s->stacksize+=STACKINEMENT;
+	}
+	*(s->top)=i;
+	s->length++;
+	s->top++;
 }
-
-int startGame(LinkList *L,int n,int first_m){
-	LinkList q = L;
-	int firstIn = 1;
-	while(n-1){
-		if(firstIn){
-			q = LinkDelete_L(q,first_m);
-			firstIn = 0;
+void pop(stack *s)
+{
+	if(s->top==s->base)
+	{
+		printf("栈空无法删除错误");
+		exit(1);
+	}
+	s->top--;
+	printf("%d ",*(s->top));
+	*(s->top)=NULL;
+	s->length--;
+}
+void operation(stack *s)
+{
+	int a[1000],i,j,k,m,n,l,z,y,flag1=1,flag2=1;
+	char ch;
+	printf("请输入车厢数\n");
+	scanf("%d",&i);
+	flag1=1;
+	for(j=0;j<i*2;j++)
+	{
+		a[j++]=1;
+		a[j]=0;
+	}
+	while(flag1)
+	{
+		l=1,k=0;
+		for(j=0;j<i*2;j++)
+		{
+			if(a[j]==1)
+				push(s,l++);
+			else if(a[j]==0)
+				pop(s);
 		}
-		else	q = LinkDelete_L(q,delateQ_data);
-		n--;
-	}
-	return q->num;
-}
+		printf("\n");
+		for(j=0;j<i;j++)
+			if(a[j]==1)
+				k++;
+			if(k==i)
+				flag1=0;
+			a[i*2-1]++;
+			while(flag2&&flag1)
+			{
 
-void main(){
-	int p[30],n=0,ch,first_m;
-	LinkList head;
-	printf("请依次输入初始m值\n");
-	scanf("%d",&first_m);
-	printf("请依次输入游戏者密码，以非整数字符结束，如：3 1 7...4s \n");
-	while(scanf("%d",&p[n++]));
-	printf("总参加人数:n:%d\n初始m值为%d\n",n-1,first_m);
-	head = creatListR(p,n-1);
-	printf("游戏过程\n",n);
-	printf("获胜者是%d号\n",startGame(head,n-1,first_m));
+				z=1,m=0,n=0,y=1;
+				for(j=i*2-1;j>=0&&z;j--)
+					if(a[j]!=2)
+						z=0;
+					else
+					{
+						a[j]=0;
+						a[j-1]++;
+					}
+					for(j=0;j<i*2&&y;j++)
+					{
+						if(a[j]==1)
+							m++;
+						else if(a[j]==0)
+							n++;
+						else
+							printf("错误\n");
+						if(n>m)
+							y=0;
+
+					}
+					if(m==i&&n==i&&a[0]==1&&a[i*2-1]==0&&y==1)
+						flag2=0;
+					else
+						a[i*2-1]++;
+
+			}
+			flag2=1;
+	}
 }
