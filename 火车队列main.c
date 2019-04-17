@@ -23,7 +23,7 @@ void initlist(stack *s)
 	s->base=s->top=(int *)malloc(STACK_INI_SIZE*sizeof(int));
 	if(!s->base)
 	{
-		printf("¿ª±ÙÊ§°Ü");
+		printf("å¼€è¾Ÿå¤±è´¥");
 		exit(1);
 	}
 	s->length=0;
@@ -45,7 +45,7 @@ void pop(stack *s)
 {
 	if(s->top==s->base)
 	{
-		printf("Õ»¿ÕÎŞ·¨É¾³ı´íÎó");
+		printf("æ ˆç©ºæ— æ³•åˆ é™¤é”™è¯¯");
 		exit(1);
 	}
 	s->top--;
@@ -57,7 +57,7 @@ void operation(stack *s)
 {
 	int a[1000],i,j,k,m,n,l,z,y,flag1=1,flag2=1;
 	char ch;
-	printf("ÇëÊäÈë³µÏáÊı\n");
+	printf("è¯·è¾“å…¥è½¦å¢æ•°\n");
 	scanf("%d",&i);
 	flag1=1;
 	for(j=0;j<i*2;j++)
@@ -101,7 +101,7 @@ void operation(stack *s)
 						else if(a[j]==0)
 							n++;
 						else
-							printf("´íÎó\n");
+							printf("é”™è¯¯\n");
 						if(n>m)
 							y=0;
 
